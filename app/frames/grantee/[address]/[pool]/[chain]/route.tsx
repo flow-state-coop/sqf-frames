@@ -1,5 +1,5 @@
 import { Button } from "frames.js/next";
-import { frames } from "../../../frames";
+import { frames } from "../../../../frames";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
 
