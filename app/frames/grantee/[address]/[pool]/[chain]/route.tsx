@@ -15,20 +15,18 @@ const handler = async (req: NextRequest) => {
 
   const address = pathSegments.length > 3 ? pathSegments[3] || "" : "";
   const pool = pathSegments.length > 4 ? pathSegments[4] || "" : "";
+  const chainId = pathSegments.length > 5 ? pathSegments[5] : "";
 
   const { data: queryRes } = await apolloClient.query({
     query: gql`
-      query Recipient($pool: String!, $address: String!) {
-        recipient(id: $address, poolId: $pool, chainId: 666666666) {
+      query Recipient($pool: String!, $address: String!, $chainId: Int!) {
+        recipient(id: $address, poolId: $pool, chainId: $chainId) {
           metadata
           superappAddress
         }
       }
     `,
-    variables: {
-      pool,
-      address,
-    },
+    variables: { pool, address, chainId: Number(chainId) },
   });
 
   // console.log(queryRes.recipient);
