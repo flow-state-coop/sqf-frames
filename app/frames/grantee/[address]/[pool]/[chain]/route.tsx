@@ -29,7 +29,6 @@ const handler = async (req: NextRequest) => {
     variables: { pool, address, chainId: Number(chainId) },
   });
 
-  // console.log(queryRes.recipient);
   return await frames(async (ctx) => {
     return {
       image: (
@@ -54,7 +53,7 @@ const handler = async (req: NextRequest) => {
           target={{
             pathname: "/stream/wrapDegen",
           }}
-          post_url={`/grantee/` + address + "/" + pool}
+          post_url={`/grantee/`}
         >
           Wrap to DegenX
         </Button>,
@@ -65,6 +64,7 @@ const handler = async (req: NextRequest) => {
             query: {
               address: address,
               pool: pool,
+              chainId: chainId,
             },
           }}
           post_url='/stream/success'
@@ -72,7 +72,13 @@ const handler = async (req: NextRequest) => {
           Create Stream
         </Button>,
       ],
-      state: { address, pool, amount: ctx.message?.inputText || "" },
+      state: {
+        address,
+        pool,
+        amount: ctx.message?.inputText || "",
+        chainId,
+        title: queryRes.recipient.metadata.title,
+      },
     };
   })(req);
 };

@@ -1,13 +1,8 @@
-import { TransactionTargetResponse, getFrameMessage } from "frames.js";
-import { NextRequest, NextResponse } from "next/server";
-import {
-  Abi,
-  createPublicClient,
-  encodeFunctionData,
-  http,
-  parseEther,
-} from "viem";
+import { getFrameMessage } from "frames.js";
+
+import { Abi, encodeFunctionData, parseEther } from "viem";
 import { cfaForwarderAbi } from "../../../lib/abi/cfaForwarder";
+import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest, res: NextResponse) => {
   const json = await req.json();
