@@ -53,7 +53,7 @@ const handler = async (req: NextRequest) => {
           target={{
             pathname: "/stream/wrapDegen",
           }}
-          post_url={`/grantee/`}
+          post_url={`/grantee/${address}/${pool}/${chainId}`}
         >
           Wrap to DegenX
         </Button>,
@@ -62,7 +62,7 @@ const handler = async (req: NextRequest) => {
           target={{
             pathname: "/stream/donate",
             query: {
-              address: address,
+              address: queryRes.recipient.superappAddress,
               pool: pool,
               chainId: chainId,
             },

@@ -1,10 +1,12 @@
-import { getFrameMessage } from "frames.js";
+import { TransactionTargetResponse, getFrameMessage } from "frames.js";
 
 import { Abi, encodeFunctionData, parseEther } from "viem";
 import { cfaForwarderAbi } from "../../../lib/abi/cfaForwarder";
 import { NextRequest, NextResponse } from "next/server";
 
-const handler = async (req: NextRequest, res: NextResponse) => {
+export async function POST(
+  req: NextRequest
+): Promise<NextResponse<TransactionTargetResponse>> {
   const json = await req.json();
 
   const frameMessage = await getFrameMessage(json);
@@ -42,7 +44,4 @@ const handler = async (req: NextRequest, res: NextResponse) => {
       value: "0",
     },
   });
-};
-
-export const POST = handler;
-export const GET = handler;
+}
