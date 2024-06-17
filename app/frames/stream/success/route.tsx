@@ -3,7 +3,7 @@ import { Button } from "frames.js/next/pages-router/server";
 import { frames } from "../../frames";
 
 const handleRequest = frames(async (ctx) => {
-  const { address, pool, amount } = ctx;
+  const { address, pool, amount, chainId } = ctx;
   return {
     image: (
       <>
@@ -16,7 +16,18 @@ const handleRequest = frames(async (ctx) => {
       <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
         SQF Round Details
       </Button>,
-      <Button action='post' target={`/edit`}>
+      <Button
+        action='post'
+        target={{
+          pathname: "/edit",
+          query: {
+            address: address,
+            pool: pool,
+            chainId: chainId,
+          },
+        }}
+        post_url='/stream/success'
+      >
         Edit Stream
       </Button>,
     ],

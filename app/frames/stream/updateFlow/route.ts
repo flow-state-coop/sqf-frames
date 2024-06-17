@@ -28,7 +28,7 @@ export async function POST(
 
   const createFlowCalldata = encodeFunctionData({
     abi: cfaForwarderAbi,
-    functionName: "createFlow",
+    functionName: "updateFlow",
     args: [
       chain.addressX,
       frameMessage.connectedAddress,
@@ -43,7 +43,7 @@ export async function POST(
     method: "eth_sendTransaction",
     params: {
       abi: cfaForwarderAbi as Abi,
-      to: chain.cfaForwarderAddress,
+      to: chain.cfaForwarderAddress as `0x${string}`,
       data: createFlowCalldata,
       value: "0",
     },

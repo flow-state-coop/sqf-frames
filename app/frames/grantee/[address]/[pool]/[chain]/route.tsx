@@ -52,6 +52,9 @@ const handler = async (req: NextRequest) => {
           action='tx'
           target={{
             pathname: "/stream/wrapDegen",
+            query: {
+              chainId: chainId,
+            },
           }}
           post_url={`/grantee/${address}/${pool}/${chainId}`}
         >
