@@ -5,11 +5,7 @@ import { NextRequest } from "next/server";
 
 const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
-    const amount = ctx.amount;
-    const title = ctx.title;
-    const address = ctx.address;
-    const pool = ctx.pool;
-    const chainId = ctx.chainId;
+    const { address, pool, amount, chainId, title } = ctx.searchParams;
 
     return {
       image: (
@@ -32,6 +28,7 @@ const handler = async (req: NextRequest) => {
               address: address,
               pool: pool,
               chainId: chainId,
+              title: title,
             },
           }}
         >

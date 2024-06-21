@@ -30,11 +30,12 @@ const handler = async (req: NextRequest) => {
   });
 
   return await frames(async (ctx) => {
+    const title = queryRes.recipient.metadata.title;
     return {
       image: (
         <span tw='flex flex-col px-10'>
           <h3>Streaming QF- Degen Builders Round</h3>
-          <h3>{queryRes.recipient.metadata.title}</h3>
+          <h3>{title}</h3>
           <p>
             Open a $DEGEN donation stream that's matched with quadratic funding.
           </p>
@@ -70,7 +71,10 @@ const handler = async (req: NextRequest) => {
               chainId: chainId,
             },
           }}
-          post_url='/stream/success'
+          post_url={{
+            pathname: "/stream/success",
+            query: { address, pool, chainId, title },
+          }}
         >
           Create Stream
         </Button>,
