@@ -5,7 +5,13 @@ import { NextRequest } from "next/server";
 
 const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
-    const { address, pool, amount, chainId, title } = ctx.searchParams;
+    const {
+      address = "",
+      pool = "",
+      amount = "1",
+      chainId = "666666666",
+      title = "",
+    } = ctx.searchParams;
 
     return {
       image: (
@@ -35,7 +41,7 @@ const handler = async (req: NextRequest) => {
           Edit Stream
         </Button>,
       ],
-      state: { address, pool, amount, chainId },
+      state: { address, pool, amount, chainId, title },
     };
   })(req);
 };

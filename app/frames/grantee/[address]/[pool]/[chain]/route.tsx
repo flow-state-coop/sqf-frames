@@ -31,6 +31,7 @@ const handler = async (req: NextRequest) => {
 
   return await frames(async (ctx) => {
     const title = queryRes.recipient.metadata.title;
+    const amount = ctx.message?.inputText || "";
     return {
       image: (
         <span tw='flex flex-col px-10'>
@@ -82,9 +83,9 @@ const handler = async (req: NextRequest) => {
       state: {
         address,
         pool,
-        amount: ctx.message?.inputText || "",
-        chainId,
-        title: queryRes.recipient.metadata.title,
+        amount,
+        chainId: chainId || "666666666",
+        title,
       },
     };
   })(req);

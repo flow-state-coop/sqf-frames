@@ -74,7 +74,13 @@ const handler = async (req: NextRequest) => {
           Create Stream
         </Button>,
       ],
-      state: { address, pool, amount: ctx.message?.inputText || "" },
+      state: {
+        address,
+        pool,
+        amount: ctx.message?.inputText || "",
+        title: queryRes.recipient.metadata.title,
+        chainId: "666666666",
+      },
     };
   })(req);
 };
