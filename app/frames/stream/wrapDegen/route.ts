@@ -1,18 +1,8 @@
-import {
-  TransactionTargetResponse,
-  getFrameMessage,
-  getFrameMessageFromRequestBody,
-} from "frames.js";
+import { TransactionTargetResponse, getFrameMessage } from "frames.js";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  Abi,
-  createPublicClient,
-  encodeFunctionData,
-  http,
-  parseEther,
-} from "viem";
-import { degen } from "viem/chains";
+import { Abi, encodeFunctionData, parseEther } from "viem";
 import { superTokenAbi } from "../../../lib/abi/superToken";
+import { chainConfig } from "../../constants";
 
 export async function POST(
   req: NextRequest
@@ -21,28 +11,28 @@ export async function POST(
 
   const frameMessage = await getFrameMessage(json);
   const amount = frameMessage?.inputText ?? "1";
+  const { searchParams } = new URL(req.url);
+  const chainId = searchParams.get("chainId") ?? "666666666";
 
   if (!frameMessage) {
     throw new Error("No frame message");
   }
 
-  const degenxAddress = "0xda58FA9bfc3D3960df33ddD8D4d762Cf8Fa6F7ad";
+  const chain = chainConfig[chainId];
+  if (!chain) {
+    throw new Error(`Unsupported chainId: ${chainId}`);
+  }
   const wrapCalldata = encodeFunctionData({
     abi: superTokenAbi,
     functionName: "upgradeByETH",
   });
 
-  const publicClient = createPublicClient({
-    chain: degen,
-    transport: http("https://rpc.degen.tips"),
-  });
-
   return NextResponse.json({
-    chainId: "eip155:666666666", // Degen Chain
+    chainId: "eip155:" + chainId,
     method: "eth_sendTransaction",
     params: {
       abi: superTokenAbi as Abi,
-      to: degenxAddress,
+      to: chain.addressX,
       data: wrapCalldata,
       value: parseEther(amount).toString(),
     },
