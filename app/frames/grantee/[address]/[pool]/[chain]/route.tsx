@@ -39,13 +39,15 @@ const handler = async (req: NextRequest) => {
     const allocationToken = queryRes.recipient.poolChain.allocationToken;
     const tokenName = queryRes.recipient.poolChain.metadata.name;
     const amount = ctx.message?.inputText || "";
+    const description = queryRes.recipient.metadata.description;
     return {
       image: (
-        <span tw='flex flex-col px-10'>
+        <span tw='flex flex-col px-10 '>
           <h4>
             ${allocationToken} {tokenName} by Flow State
           </h4>
-          <h3>{title}</h3>
+          <h4>{title}</h4>
+          <h4>{description}</h4>
           <p>
             Open a $DEGEN donation stream that's matched with quadratic funding.
           </p>
@@ -58,6 +60,18 @@ const handler = async (req: NextRequest) => {
       buttons: [
         <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
           SQF Round Details
+        </Button>,
+        <Button
+          action='post'
+          target={{
+            pathname: "/grantee",
+            query: {
+              address,
+              pool,
+            },
+          }}
+        >
+          Check the Multiplier
         </Button>,
         <Button
           action='tx'
@@ -95,6 +109,9 @@ const handler = async (req: NextRequest) => {
         amount,
         chainId: chainId || "666666666",
         title,
+      },
+      imageOptions: {
+        aspectRatio: "1:1",
       },
     };
   })(req);
