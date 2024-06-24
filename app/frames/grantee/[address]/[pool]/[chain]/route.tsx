@@ -23,6 +23,11 @@ const handler = async (req: NextRequest) => {
         recipient(id: $address, poolId: $pool, chainId: $chainId) {
           metadata
           superappAddress
+          poolChain {
+            allocationToken
+            matchingToken
+            metadata
+          }
         }
       }
     `,
@@ -31,11 +36,15 @@ const handler = async (req: NextRequest) => {
 
   return await frames(async (ctx) => {
     const title = queryRes.recipient.metadata.title;
+    const allocationToken = queryRes.recipient.poolChain.allocationToken;
+    const tokenName = queryRes.recipient.poolChain.metadata.name;
     const amount = ctx.message?.inputText || "";
     return {
       image: (
         <span tw='flex flex-col px-10'>
-          <h3>Streaming QF- Degen Builders Round</h3>
+          <h4>
+            ${allocationToken} {tokenName} by Flow State
+          </h4>
           <h3>{title}</h3>
           <p>
             Open a $DEGEN donation stream that's matched with quadratic funding.
