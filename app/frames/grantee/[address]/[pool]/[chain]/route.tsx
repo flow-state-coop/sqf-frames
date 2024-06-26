@@ -2,6 +2,8 @@ import { Button } from "frames.js/next";
 import { frames } from "../../../../frames";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
+import { chainConfig } from "../../../../constants";
+import Image from "next/image";
 
 const apolloClient = new ApolloClient({
   uri: "https://api.streaming.fund/graphql",
@@ -15,7 +17,15 @@ const handler = async (req: NextRequest) => {
 
   const address = pathSegments.length > 3 ? pathSegments[3] || "" : "";
   const pool = pathSegments.length > 4 ? pathSegments[4] || "" : "";
-  const chainId = pathSegments.length > 5 ? pathSegments[5] : "";
+  const chainId =
+    pathSegments.length > 5 ? pathSegments[5] || "666666666" : "666666666";
+
+  const chainConfigEntry = chainConfig[chainId];
+  if (!chainConfigEntry) {
+    throw new Error(`Unsupported chainId: ${chainId}`);
+  }
+
+  const { name: chainName } = chainConfigEntry;
 
   const { data: queryRes } = await apolloClient.query({
     query: gql`
@@ -40,26 +50,31 @@ const handler = async (req: NextRequest) => {
     const tokenName = queryRes.recipient.poolChain.metadata.name;
     const amount = ctx.message?.inputText || "";
     const description = queryRes.recipient.metadata.description;
+    const banner = queryRes.recipient.metadata.bannerImg;
+    const logo = queryRes.recipient.metadata.logoImg;
+
     return {
       image: (
-        <span tw='flex flex-col px-10 '>
+        <span tw='flex flex-col px-8 bg-violet-900 text-white'>
+          {/* <Image src={banner} alt='Banner Image' /> */}
+          {/* {banner} */}
           <h4>
-            ${allocationToken} {tokenName} by Flow State
+            ${chainName} {tokenName} by Flow State
           </h4>
+          <p>A quadratic funding round every second</p>
           <h4>{title}</h4>
           <h4>{description}</h4>
+          <p>Power their mission:</p>
           <p>
-            Open a $DEGEN donation stream that's matched with quadratic funding.
+            1. Wrap ${chainName} to ${chainName}x (as needed){" "}
           </p>
-          <p>
-            The more DEGENS that donate, the higher the matching multiplier!
-          </p>
+          <p>2. Open a stream with real-time ${chainName} matching 🌊💸</p>
         </span>
       ),
       textInput: "Monthly Value",
       buttons: [
         <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
-          SQF Round Details
+          UI
         </Button>,
         <Button
           action='post'
@@ -71,7 +86,7 @@ const handler = async (req: NextRequest) => {
             },
           }}
         >
-          Check the Multiplier
+          Multiplier
         </Button>,
         <Button
           action='tx'
@@ -83,7 +98,7 @@ const handler = async (req: NextRequest) => {
           }}
           post_url={`/grantee/${address}/${pool}/${chainId}`}
         >
-          Wrap to DegenX
+          1. Wrap
         </Button>,
         <Button
           action='tx'
@@ -100,7 +115,7 @@ const handler = async (req: NextRequest) => {
             query: { address, pool, chainId, title },
           }}
         >
-          Create Stream
+          2. Stream
         </Button>,
       ],
       state: {

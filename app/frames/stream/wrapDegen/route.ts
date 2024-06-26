@@ -22,10 +22,48 @@ export async function POST(
   if (!chain) {
     throw new Error(`Unsupported chainId: ${chainId}`);
   }
-  const wrapCalldata = encodeFunctionData({
-    abi: superTokenAbi,
-    functionName: "upgradeByETH",
+  const publicClient = createPublicClient({
+    transport: http("https://rpc.degen.tips"),
+    batch: {
+      multicall: true,
+    },
   });
+
+  const allocationTokenSymbol = await publicClient.readContract({
+    address: queryRes.recipient.poolChain.allocationToken,
+    abi: superTokenAbi,
+    functionName: "symbol",
+  });
+  const underlyingToken = await publicClient.readContract({
+    address: queryRes.recipient.poolChain.allocationToken,
+    abi: superTokenAbi,
+    functionName: "getUnderlyingToken",
+  });
+
+  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+  let isPureSuperToken = false;
+  let isNativeSuperToken = false;
+
+  if (allocationTokenSymbol === "ETHx" || allocationTokenSymbol === "DEGENx") {
+    isNativeSuperToken = true;
+  } else if (underlyingToken === ZERO_ADDRESS) {
+    isPureSuperToken = true;
+  }
+
+  const isWrapperSuperToken = !isPureSuperToken && !isNativeSuperToken;
+  let wrapCalldata = "";
+  if (isWrapperSuperToken) {
+    wrapCalldata = encodeFunctionData({
+      abi: superTokenAbi,
+      functionName: "upgradeByETH",
+    });
+  } else {
+    wrapCalldata = encodeFunctionData({
+      abi: superTokenAbi,
+      functionName: "upgrade",
+      args: [parseEther(amount)],
+    });
+  }
 
   return NextResponse.json({
     chainId: "eip155:" + chainId,
