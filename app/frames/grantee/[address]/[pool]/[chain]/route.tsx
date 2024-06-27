@@ -4,6 +4,8 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
 import { chainConfig } from "../../../../constants";
 import Image from "next/image";
+import { superTokenAbi } from "../../../../../lib/abi/superToken";
+import { createPublicClient, http } from "viem";
 
 const apolloClient = new ApolloClient({
   uri: "https://api.streaming.fund/graphql",
@@ -53,6 +55,37 @@ const handler = async (req: NextRequest) => {
     const banner = queryRes.recipient.metadata.bannerImg;
     const logo = queryRes.recipient.metadata.logoImg;
 
+    const publicClient = createPublicClient({
+      transport: http("https://rpc.degen.tips"),
+      batch: {
+        multicall: true,
+      },
+    });
+
+    const allocationTokenSymbol = await publicClient.readContract({
+      address: queryRes.recipient.poolChain.allocationToken,
+      abi: superTokenAbi,
+      functionName: "symbol",
+    });
+    const underlyingToken = await publicClient.readContract({
+      address: queryRes.recipient.poolChain.allocationToken,
+      abi: superTokenAbi,
+      functionName: "getUnderlyingToken",
+    });
+
+    const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+    let isPureSuperToken = false;
+    let isNativeSuperToken = false;
+
+    if (
+      allocationTokenSymbol === "ETHx" ||
+      allocationTokenSymbol === "DEGENx"
+    ) {
+      isNativeSuperToken = true;
+    } else if (underlyingToken === ZERO_ADDRESS) {
+      isPureSuperToken = true;
+    }
+
     return {
       image: (
         <span tw='flex flex-col px-8 bg-violet-900 text-white'>
@@ -88,12 +121,15 @@ const handler = async (req: NextRequest) => {
         >
           Multiplier
         </Button>,
+      ],
+      buttons2: [
         <Button
           action='tx'
           target={{
             pathname: "/stream/wrapDegen",
             query: {
               chainId: chainId,
+              isWrapperSuperToken: isPureSuperToken,
             },
           }}
           post_url={`/grantee/${address}/${pool}/${chainId}`}
