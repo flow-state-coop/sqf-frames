@@ -13,6 +13,7 @@ export async function POST(
   const amount = frameMessage?.inputText ?? "1";
   const { searchParams } = new URL(req.url);
   const chainId = searchParams.get("chainId") ?? "666666666";
+  const isWrapperSuperToken = searchParams.get("isWrapperSuperToken");
 
   if (!frameMessage) {
     throw new Error("No frame message");
@@ -22,36 +23,13 @@ export async function POST(
   if (!chain) {
     throw new Error(`Unsupported chainId: ${chainId}`);
   }
-  const publicClient = createPublicClient({
-    transport: http("https://rpc.degen.tips"),
-    batch: {
-      multicall: true,
-    },
-  });
 
-  const allocationTokenSymbol = await publicClient.readContract({
-    address: queryRes.recipient.poolChain.allocationToken,
+  let wrapCalldata = encodeFunctionData({
     abi: superTokenAbi,
-    functionName: "symbol",
-  });
-  const underlyingToken = await publicClient.readContract({
-    address: queryRes.recipient.poolChain.allocationToken,
-    abi: superTokenAbi,
-    functionName: "getUnderlyingToken",
+    functionName: "upgrade",
+    args: [parseEther(amount)],
   });
 
-  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-  let isPureSuperToken = false;
-  let isNativeSuperToken = false;
-
-  if (allocationTokenSymbol === "ETHx" || allocationTokenSymbol === "DEGENx") {
-    isNativeSuperToken = true;
-  } else if (underlyingToken === ZERO_ADDRESS) {
-    isPureSuperToken = true;
-  }
-
-  const isWrapperSuperToken = !isPureSuperToken && !isNativeSuperToken;
-  let wrapCalldata = "";
   if (isWrapperSuperToken) {
     wrapCalldata = encodeFunctionData({
       abi: superTokenAbi,
