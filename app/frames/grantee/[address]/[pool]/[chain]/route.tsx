@@ -52,8 +52,9 @@ const handler = async (req: NextRequest) => {
     const tokenName = queryRes.recipient.poolChain.metadata.name;
     const amount = ctx.message?.inputText || "";
     const description = queryRes.recipient.metadata.description;
-    const banner = queryRes.recipient.metadata.bannerImg;
-    const logo = queryRes.recipient.metadata.logoImg;
+    const banner =
+      "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.bannerImg;
+    const logo = "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.logoImg;
 
     const publicClient = createPublicClient({
       transport: http("https://rpc.degen.tips"),
@@ -89,7 +90,7 @@ const handler = async (req: NextRequest) => {
     return {
       image: (
         <span tw='flex flex-col px-8 bg-violet-900 text-white'>
-          {/* <Image src={banner} alt='Banner Image' /> */}
+          <img src={banner} alt='Banner Image'></img>
           {/* {banner} */}
           <h4>
             ${chainName} {tokenName} by Flow State
@@ -121,8 +122,6 @@ const handler = async (req: NextRequest) => {
         >
           Multiplier
         </Button>,
-      ],
-      buttons2: [
         <Button
           action='tx'
           target={{
