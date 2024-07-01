@@ -6,6 +6,7 @@ import { chainConfig } from "../../../../constants";
 import Image from "next/image";
 import { superTokenAbi } from "../../../../../lib/abi/superToken";
 import { createPublicClient, http } from "viem";
+import { error } from "frames.js/core";
 
 const apolloClient = new ApolloClient({
   uri: "https://api.streaming.fund/graphql",
@@ -56,6 +57,8 @@ const handler = async (req: NextRequest) => {
       "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.bannerImg;
     const logo = "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.logoImg;
 
+    console.log("banner and logo", banner, logo);
+
     const publicClient = createPublicClient({
       transport: http("https://rpc.degen.tips"),
       batch: {
@@ -89,12 +92,9 @@ const handler = async (req: NextRequest) => {
 
     return {
       image: (
-        <span tw='flex flex-col bg-violet-900 text-white min-h-screen'>
-          <img
-            src={banner}
-            alt='Banner Image'
-            style={{ width: "200px", height: "auto" }}
-          />
+        <span tw='flex flex-col bg-purple-900 text-white min-h-screen'>
+          <img src={banner} alt='Banner Image' width={1150} height={200} />
+          <img src={logo} alt='Logo Image' width={200} height={200} />
           <h4>
             ${chainName} {tokenName} by Flow State
           </h4>
@@ -102,7 +102,7 @@ const handler = async (req: NextRequest) => {
           <h4>{description}</h4>
         </span>
       ),
-      textInput: "Monthly Value",
+      textInput: "Monthly Value (Number)",
       buttons: [
         <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
           UI
