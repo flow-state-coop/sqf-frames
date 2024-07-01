@@ -89,20 +89,17 @@ const handler = async (req: NextRequest) => {
 
     return {
       image: (
-        <span tw='flex flex-col px-8 bg-violet-900 text-white'>
-          <img src={banner} alt='Banner Image'></img>
-          {/* {banner} */}
+        <span tw='flex flex-col bg-violet-900 text-white min-h-screen'>
+          <img
+            src={banner}
+            alt='Banner Image'
+            style={{ width: "200px", height: "auto" }}
+          />
           <h4>
             ${chainName} {tokenName} by Flow State
           </h4>
-          <p>A quadratic funding round every second</p>
           <h4>{title}</h4>
           <h4>{description}</h4>
-          <p>Power their mission:</p>
-          <p>
-            1. Wrap ${chainName} to ${chainName}x (as needed){" "}
-          </p>
-          <p>2. Open a stream with real-time ${chainName} matching 🌊💸</p>
         </span>
       ),
       textInput: "Monthly Value",
