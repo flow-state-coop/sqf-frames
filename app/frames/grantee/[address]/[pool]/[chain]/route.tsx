@@ -46,11 +46,11 @@ const handler = async (req: NextRequest) => {
   });
 
   return await frames(async (ctx) => {
-    const title = queryRes.recipient.metadata.title;
+    const title = queryRes.recipient.metadata.title ?? "";
     const allocationToken = queryRes.recipient.poolChain.allocationToken;
-    const tokenName = queryRes.recipient.poolChain.metadata.name;
-    const amount = ctx.message?.inputText || "";
-    const description = queryRes.recipient.metadata.description;
+    const tokenName = queryRes.recipient.poolChain.metadata.name ?? "";
+    const amount = ctx.message?.inputText ?? "";
+    const description = queryRes.recipient.metadata.description ?? "";
     const banner =
       "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.bannerImg;
     const logo = "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.logoImg;
@@ -91,11 +91,17 @@ const handler = async (req: NextRequest) => {
     return {
       image: (
         <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
-          <h4>
-            ${chainName} {tokenName} by Flow State
-          </h4>
-          <img src={banner} alt='Banner Image' width={1000} height={200} />
-          <img src={logo} alt='Logo Image' width={200} height={200} />
+          <div tw='flex justify-center p-0 m-0'>
+            <h4>
+              ${chainName} {tokenName} by Flow State
+            </h4>
+          </div>
+          <div tw='flex justify-center'>
+            <img src={banner} alt='Banner Image' width={1000} height={200} />
+          </div>
+          <div tw='flex ml-5'>
+            <img src={logo} alt='Logo Image' width={200} height={200} />
+          </div>
           <h4>{title}</h4>
           <h4 className='line-clamp-3'>{description}</h4>
         </span>
@@ -110,14 +116,13 @@ const handler = async (req: NextRequest) => {
           target={{
             pathname: "/multiplier",
             query: {
-              address: address || "",
-              pool: pool || "",
-              amount: amount || "",
+              address: address,
+              pool: pool,
               chainId: chainId || "666666666",
-              title: title || "",
-              description: description || "",
-              banner: banner,
-              logo: logo,
+              title: title,
+              description: description,
+              banner: banner || "",
+              logo: logo || "",
               isPureSuperToken,
               chainName: chainName || "",
               tokenName: tokenName || "",

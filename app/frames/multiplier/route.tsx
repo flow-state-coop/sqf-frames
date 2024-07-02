@@ -1,10 +1,7 @@
 import { Button } from "frames.js/next";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
-import { createPublicClient, http } from "viem";
-import { chainConfig } from "../constants";
 import { frames } from "../frames";
-import { superTokenAbi } from "../../lib/abi/superToken";
 
 const apolloClient = new ApolloClient({
   uri: "https://api.streaming.fund/graphql",
@@ -29,13 +26,19 @@ const handler = async (req: NextRequest) => {
     return {
       image: (
         <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
-          <h4>
-            ${chainName} {tokenName} by Flow State
-          </h4>
-          <img src={banner} alt='Banner Image' width={1000} height={200} />
-          <img src={logo} alt='Logo Image' width={200} height={200} />
+          <div tw='flex justify-center p-0 m-0'>
+            <h4>
+              ${chainName} {tokenName} by Flow State
+            </h4>
+          </div>
+          <div tw='flex justify-center'>
+            <img src={banner} alt='Banner Image' width={1000} height={200} />
+          </div>
+          <div tw='flex ml-5'>
+            <img src={logo} alt='Logo Image' width={200} height={200} />
+          </div>
           <h4>{title}</h4>
-          <h4 className='line-clamp-3'>{description}</h4>
+          <p>🌊💸 Real-Time QF Matching Multiplier</p>
         </span>
       ),
       textInput: "Monthly Value (Number)",
