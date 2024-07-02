@@ -3,10 +3,8 @@ import { frames } from "../../../../frames";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
 import { chainConfig } from "../../../../constants";
-import Image from "next/image";
 import { superTokenAbi } from "../../../../../lib/abi/superToken";
 import { createPublicClient, http } from "viem";
-import { error } from "frames.js/core";
 
 const apolloClient = new ApolloClient({
   uri: "https://api.streaming.fund/graphql",
@@ -92,14 +90,14 @@ const handler = async (req: NextRequest) => {
 
     return {
       image: (
-        <span tw='flex flex-col bg-purple-900 text-white min-h-screen'>
-          <img src={banner} alt='Banner Image' width={1150} height={200} />
-          <img src={logo} alt='Logo Image' width={200} height={200} />
+        <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
           <h4>
             ${chainName} {tokenName} by Flow State
           </h4>
+          <img src={banner} alt='Banner Image' width={1000} height={200} />
+          <img src={logo} alt='Logo Image' width={200} height={200} />
           <h4>{title}</h4>
-          <h4>{description}</h4>
+          <h4 className='line-clamp-3'>{description}</h4>
         </span>
       ),
       textInput: "Monthly Value (Number)",
@@ -110,10 +108,19 @@ const handler = async (req: NextRequest) => {
         <Button
           action='post'
           target={{
-            pathname: "/grantee",
+            pathname: "/multiplier",
             query: {
-              address,
-              pool,
+              address: address || "",
+              pool: pool || "",
+              amount: amount || "",
+              chainId: chainId || "666666666",
+              title: title || "",
+              description: description || "",
+              banner: banner,
+              logo: logo,
+              isPureSuperToken,
+              chainName: chainName || "",
+              tokenName: tokenName || "",
             },
           }}
         >
