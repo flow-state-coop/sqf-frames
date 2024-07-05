@@ -3,7 +3,16 @@ import { NextRequest } from "next/server";
 import { frames } from "../frames";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { strategyAbi } from "../../lib/abi/strategy";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, http, parseEther } from "viem";
+import { calcMatchingImpactEstimate } from "../../lib/matchingImpactEstimate";
+
+const SECONDS_IN_MINUTE = 60;
+const MINUTES_IN_HOUR = 60;
+const HOURS_IN_DAY = 24;
+const DAYS_IN_MONTH = 30.44;
+
+const SECONDS_IN_MONTH =
+  SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_MONTH;
 
 const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
@@ -61,6 +70,27 @@ const handler = async (req: NextRequest) => {
       },
     });
 
+    const matchingPool = queryRes.pool;
+    const adjustedFlowRate =
+      BigInt(matchingPool.flowRate) - BigInt(matchingPool.adjustmentFlowRate);
+    const member = matchingPool.poolMembers[0];
+    const memberFlowRate =
+      BigInt(matchingPool.totalUnits) > 0
+        ? (BigInt(member.units) * adjustedFlowRate) /
+          BigInt(matchingPool.totalUnits)
+        : BigInt(0);
+
+    const impactMatchingEstimate = calcMatchingImpactEstimate({
+      totalFlowRate: BigInt(matchingPool.flowRate ?? 0),
+      totalUnits: BigInt(matchingPool.totalUnits ?? 0),
+      granteeUnits: BigInt(member.units),
+      granteeFlowRate: memberFlowRate,
+      previousFlowRate: BigInt(0),
+      newFlowRate: parseEther("1") / BigInt(SECONDS_IN_MONTH),
+      //newFlowRate: parseEther("5") / BigInt(SECONDS_IN_MONTH),
+      //newFlowRate: parseEther("100") / BigInt(SECONDS_IN_MONTH),
+    });
+
     return {
       image: (
         <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
@@ -78,7 +108,7 @@ const handler = async (req: NextRequest) => {
           <h4>{title}</h4>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
           <p>
-            💧 Flow Rate: {queryRes.pool.flowRate} {tokenName}/s
+            💧 Flow Rate: {impactMatchingEstimate} {tokenName}/s
           </p>
         </span>
       ),
