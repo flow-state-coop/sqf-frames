@@ -1,27 +1,65 @@
 import { Button } from "frames.js/next";
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
 import { frames } from "../frames";
-
-const apolloClient = new ApolloClient({
-  uri: "https://api.streaming.fund/graphql",
-  cache: new InMemoryCache(),
-});
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { strategyAbi } from "../../lib/abi/strategy";
+import { createPublicClient, http } from "viem";
 
 const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
     const {
-      address,
-      pool,
-      chainId,
-      title,
-      description,
-      banner,
-      logo,
-      isPureSuperToken,
+      address = "",
+      pool = "",
+      chainId = "666666666",
+      title = "",
+      banner = "",
+      logo = "",
+      isPureSuperToken = false,
+      strategyAddress = "",
       chainName,
       tokenName,
     } = ctx.searchParams;
+
+    const apolloClient = new ApolloClient({
+      uri: `https://subgraph-endpoints.superfluid.dev/${chainName}/protocol-v1`,
+      cache: new InMemoryCache(),
+    });
+
+    const formattedStrategyAddress = strategyAddress.startsWith("0x")
+      ? strategyAddress
+      : `0x${strategyAddress}`;
+
+    const publicClient = createPublicClient({
+      transport: http("https://rpc.degen.tips"),
+      batch: {
+        multicall: true,
+      },
+    });
+
+    const gdaPool = await publicClient.readContract({
+      address: formattedStrategyAddress as `0x${string}`,
+      abi: strategyAbi,
+      functionName: "gdaPool",
+    });
+
+    const { data: queryRes } = await apolloClient.query({
+      query: gql`
+        query MatchingPool($gdaPool: String!, $address: String!) {
+          pool(id: $gdaPool) {
+            flowRate
+            adjustmentFlowRate
+            totalUnits
+            poolMembers(where: { account: $address }) {
+              units
+            }
+          }
+        }
+      `,
+      variables: {
+        gdaPool: gdaPool.toLowerCase(),
+        address,
+      },
+    });
 
     return {
       image: (
@@ -39,6 +77,9 @@ const handler = async (req: NextRequest) => {
           </div>
           <h4>{title}</h4>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
+          <p>
+            💧 Flow Rate: {queryRes.pool.flowRate} {tokenName}/s
+          </p>
         </span>
       ),
       textInput: "Monthly Value (Number)",

@@ -26,7 +26,7 @@ const handler = async (req: NextRequest) => {
     throw new Error(`Unsupported chainId: ${chainId}`);
   }
 
-  const { name: chainName } = chainConfigEntry;
+  const { name, chainName, rpcUrl } = chainConfigEntry;
 
   const { data: queryRes } = await apolloClient.query({
     query: gql`
@@ -34,6 +34,7 @@ const handler = async (req: NextRequest) => {
         recipient(id: $address, poolId: $pool, chainId: $chainId) {
           metadata
           superappAddress
+          strategyAddress
           poolChain {
             allocationToken
             matchingToken
@@ -47,18 +48,17 @@ const handler = async (req: NextRequest) => {
 
   return await frames(async (ctx) => {
     const title = queryRes.recipient.metadata.title ?? "";
-    const allocationToken = queryRes.recipient.poolChain.allocationToken;
+    const allocationToken = queryRes.recipient.poolChain.allocationToken ?? "";
     const tokenName = queryRes.recipient.poolChain.metadata.name ?? "";
-    const amount = ctx.message?.inputText ?? "";
+    const amount = ctx.message?.inputText || "";
     const description = queryRes.recipient.metadata.description ?? "";
+    const strategyAddress = queryRes.recipient.strategyAddress ?? "";
     const banner =
       "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.bannerImg;
     const logo = "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.logoImg;
 
-    console.log("banner and logo", banner, logo);
-
     const publicClient = createPublicClient({
-      transport: http("https://rpc.degen.tips"),
+      transport: http(rpcUrl),
       batch: {
         multicall: true,
       },
@@ -91,19 +91,15 @@ const handler = async (req: NextRequest) => {
     return {
       image: (
         <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
-          <div tw='flex justify-center p-0 m-0'>
-            <h4>
-              ${chainName} {tokenName} by Flow State
-            </h4>
-          </div>
-          <div tw='flex justify-center'>
-            <img src={banner} alt='Banner Image' width={1000} height={200} />
-          </div>
-          <div tw='flex ml-5'>
+          <h4>
+            ${name} {tokenName} by Flow State
+          </h4>
+          <img src={banner} alt='Banner Image' width={1000} height={200} />
+          <div tw='flex left-5 top-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
           <h4>{title}</h4>
-          <h4 className='line-clamp-3'>{description}</h4>
+          <h4>{description}</h4>
         </span>
       ),
       textInput: "Monthly Value (Number)",
@@ -118,14 +114,14 @@ const handler = async (req: NextRequest) => {
             query: {
               address: address,
               pool: pool,
-              chainId: chainId || "666666666",
+              chainId: chainId,
               title: title,
-              description: description,
-              banner: banner || "",
-              logo: logo || "",
-              isPureSuperToken,
-              chainName: chainName || "",
-              tokenName: tokenName || "",
+              banner: banner,
+              logo: logo,
+              isPureSuperToken: isPureSuperToken,
+              strategyAddress: strategyAddress,
+              chainName: chainName,
+              tokenName: tokenName,
             },
           }}
         >
@@ -163,11 +159,11 @@ const handler = async (req: NextRequest) => {
         </Button>,
       ],
       state: {
-        address,
-        pool,
+        address: address || "",
+        pool: pool || "",
         amount,
         chainId: chainId || "666666666",
-        title,
+        title: title || "",
       },
       imageOptions: {
         aspectRatio: "1:1",
