@@ -3,17 +3,10 @@ import { NextRequest } from "next/server";
 import { frames } from "../frames";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { strategyAbi } from "../../lib/abi/strategy";
-import { createPublicClient, http, parseEther } from "viem";
+import { createPublicClient, formatEther, http, parseEther } from "viem";
 import { calcMatchingImpactEstimate } from "../../lib/matchingImpactEstimate";
 
-const SECONDS_IN_MINUTE = 60;
-const MINUTES_IN_HOUR = 60;
-const HOURS_IN_DAY = 24;
-const DAYS_IN_MONTH = 30.44;
-
-const SECONDS_IN_MONTH =
-  SECONDS_IN_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_MONTH;
-
+const SECONDS_IN_MONTH = 2628000;
 const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
     const {
@@ -91,9 +84,11 @@ const handler = async (req: NextRequest) => {
       //newFlowRate: parseEther("100") / BigInt(SECONDS_IN_MONTH),
     });
 
+    const estimate = formatEther(impactMatchingEstimate * BigInt(2628000));
+
     return {
       image: (
-        <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
+        <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen min-w-screen'>
           <div tw='flex justify-center p-0 m-0'>
             <h4>
               ${chainName} {tokenName} by Flow State
@@ -108,7 +103,7 @@ const handler = async (req: NextRequest) => {
           <h4>{title}</h4>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
           <p>
-            💧 Flow Rate: {impactMatchingEstimate} {tokenName}/s
+            💧 Flow Rate: {estimate} {tokenName}/second
           </p>
         </span>
       ),
