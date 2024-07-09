@@ -90,7 +90,7 @@ const handler = async (req: NextRequest) => {
 
     return {
       image: (
-        <span tw='flex flex-col p-10 bg-violet-600 text-white min-h-screen'>
+        <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen'>
           <h4>
             ${name} {tokenName} by Flow State
           </h4>
