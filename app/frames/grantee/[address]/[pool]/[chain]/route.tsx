@@ -96,7 +96,9 @@ const handler = async (req: NextRequest) => {
               ${name} {tokenName} by Flow State
             </h4>
           </div>
-          <img src={banner} alt='Banner Image' width={1000} height={200} />
+          <div tw='flex justify-center'>
+            <img src={banner} alt='Banner Image' width={1000} height={200} />
+          </div>
           <div tw='flex left-5 top-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
