@@ -88,7 +88,7 @@ const handler = async (req: NextRequest) => {
 
     return {
       image: (
-        <span tw='flex flex-col p-10 bg-slate-900text-white min-h-screen min-w-screen'>
+        <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen min-w-screen'>
           <div tw='flex justify-center p-0 m-0'>
             <h4>
               ${chainName} {tokenName} by Flow State
@@ -111,18 +111,6 @@ const handler = async (req: NextRequest) => {
       buttons: [
         <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
           UI
-        </Button>,
-        <Button
-          action='post'
-          target={{
-            pathname: "/grantee",
-            query: {
-              address,
-              pool,
-            },
-          }}
-        >
-          Multiplier
         </Button>,
         <Button
           action='tx'
