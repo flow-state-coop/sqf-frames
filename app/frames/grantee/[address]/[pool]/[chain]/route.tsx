@@ -125,6 +125,7 @@ const handler = async (req: NextRequest) => {
               isPureSuperToken: isPureSuperToken,
               strategyAddress: strategyAddress,
               chainName: chainName,
+              name: name,
               tokenName: tokenName,
             },
           }}

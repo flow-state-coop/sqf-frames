@@ -19,6 +19,7 @@ const handler = async (req: NextRequest) => {
       isPureSuperToken = false,
       strategyAddress = "",
       chainName,
+      name,
       tokenName,
     } = ctx.searchParams;
 
@@ -91,7 +92,7 @@ const handler = async (req: NextRequest) => {
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen min-w-screen'>
           <div tw='flex justify-center p-0 m-0'>
             <h4>
-              ${chainName} {tokenName} by Flow State
+              ${name} {tokenName} by Flow State
             </h4>
           </div>
           <div tw='flex justify-center'>
