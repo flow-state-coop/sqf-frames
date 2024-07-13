@@ -99,7 +99,7 @@ const handler = async (req: NextRequest) => {
           <div tw='flex justify-center'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
           </div>
-          <div tw='flex left-5 top-5'>
+          <div tw='flex relative -mt-20 left-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
           <h4>{title}</h4>
