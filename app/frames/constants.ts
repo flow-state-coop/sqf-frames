@@ -31,7 +31,7 @@ export const chainConfig: Record<
     cfaForwarderAddress: "0xcfA132E353cB4E398080B9700609bb008eceB125",
     addressX: "0xFc55F2854e74b4f42D01a6d3DAAC4c52D9dfdcFf",
     name: "Arbitrum USDC",
-    chainName: "Arbitrum",
+    chainName: "Arbitrum One",
     rpcUrl: "https://arb1.arbitrum.io/rpc",
   },
   // base
@@ -41,5 +41,13 @@ export const chainConfig: Record<
     name: "Base",
     chainName: "base-mainnet",
     rpcUrl: "https://mainnet.base.org",
+  },
+  // optimism sepolia
+  "11155420": {
+    cfaForwarderAddress: "0xcfA132E353cB4E398080B9700609bb008eceB125",
+    addressX: "0x0043d7c85C8b96a49A72A92C0B48CdC4720437d7",
+    name: "Optimism Sepolia",
+    chainName: "fDAIx",
+    rpcUrl: "https://sepolia.optimism.io",
   },
 };
