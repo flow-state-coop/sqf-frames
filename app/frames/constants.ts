@@ -47,7 +47,7 @@ export const chainConfig: Record<
     cfaForwarderAddress: "0xcfA132E353cB4E398080B9700609bb008eceB125",
     addressX: "0x0043d7c85C8b96a49A72A92C0B48CdC4720437d7",
     name: "Optimism Sepolia",
-    chainName: "fDAIx",
+    chainName: "OP Sepolia",
     rpcUrl: "https://sepolia.optimism.io",
   },
 };
