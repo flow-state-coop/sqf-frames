@@ -13,6 +13,7 @@ export async function POST(
   const amount = frameMessage?.inputText ?? "1";
   const { searchParams } = new URL(req.url);
   const chainId = searchParams.get("chainId") ?? "666666666";
+  const isWrapperSuperToken = searchParams.get("isWrapperSuperToken");
 
   if (!frameMessage) {
     throw new Error("No frame message");
@@ -22,10 +23,25 @@ export async function POST(
   if (!chain) {
     throw new Error(`Unsupported chainId: ${chainId}`);
   }
-  const wrapCalldata = encodeFunctionData({
+
+  let wrapCalldata = encodeFunctionData({
     abi: superTokenAbi,
-    functionName: "upgradeByETH",
+    functionName: "upgrade",
+    args: [parseEther(amount)],
   });
+
+  if (isWrapperSuperToken) {
+    wrapCalldata = encodeFunctionData({
+      abi: superTokenAbi,
+      functionName: "upgradeByETH",
+    });
+  } else {
+    wrapCalldata = encodeFunctionData({
+      abi: superTokenAbi,
+      functionName: "upgrade",
+      args: [parseEther(amount)],
+    });
+  }
 
   return NextResponse.json({
     chainId: "eip155:" + chainId,
