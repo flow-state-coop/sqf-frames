@@ -127,6 +127,7 @@ const handler = async (req: NextRequest) => {
               chainName: chainName,
               name: name,
               tokenName: tokenName,
+              rpcUrl: rpcUrl,
             },
           }}
         >

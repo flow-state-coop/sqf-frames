@@ -21,6 +21,7 @@ const handler = async (req: NextRequest) => {
       chainName,
       name,
       tokenName,
+      rpcUrl,
     } = ctx.searchParams;
 
     const apolloClient = new ApolloClient({
@@ -33,7 +34,7 @@ const handler = async (req: NextRequest) => {
       : `0x${strategyAddress}`;
 
     const publicClient = createPublicClient({
-      transport: http("https://rpc.degen.tips"),
+      transport: http(rpcUrl),
       batch: {
         multicall: true,
       },
@@ -81,8 +82,23 @@ const handler = async (req: NextRequest) => {
       granteeFlowRate: memberFlowRate,
       previousFlowRate: BigInt(0),
       newFlowRate: parseEther("1") / BigInt(SECONDS_IN_MONTH),
-      //newFlowRate: parseEther("5") / BigInt(SECONDS_IN_MONTH),
-      //newFlowRate: parseEther("100") / BigInt(SECONDS_IN_MONTH),
+    });
+    const impactMatchingEstimate5 = calcMatchingImpactEstimate({
+      totalFlowRate: BigInt(matchingPool.flowRate ?? 0),
+      totalUnits: BigInt(matchingPool.totalUnits ?? 0),
+      granteeUnits: BigInt(member.units),
+      granteeFlowRate: memberFlowRate,
+      previousFlowRate: BigInt(0),
+      newFlowRate: parseEther("5") / BigInt(SECONDS_IN_MONTH),
+    });
+
+    const impactMatchingEstimate100 = calcMatchingImpactEstimate({
+      totalFlowRate: BigInt(matchingPool.flowRate ?? 0),
+      totalUnits: BigInt(matchingPool.totalUnits ?? 0),
+      granteeUnits: BigInt(member.units),
+      granteeFlowRate: memberFlowRate,
+      previousFlowRate: BigInt(0),
+      newFlowRate: parseEther("100") / BigInt(SECONDS_IN_MONTH),
     });
 
     const estimate = formatEther(impactMatchingEstimate * BigInt(2628000));
