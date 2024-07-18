@@ -102,7 +102,9 @@ const handler = async (req: NextRequest) => {
           <div tw='flex relative -mt-20 left-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
-          <h4>{title}</h4>
+          <div tw='flex text-6xl'>
+            <h4>{title}</h4>
+          </div>
           <h4>{description}</h4>
         </span>
       ),
