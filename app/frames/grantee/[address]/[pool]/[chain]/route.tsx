@@ -88,6 +88,8 @@ const handler = async (req: NextRequest) => {
       isPureSuperToken = true;
     }
 
+    const DonationText = "Enter Donation Stream Value " + { chainName };
+
     return {
       image: (
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen'>
@@ -108,7 +110,7 @@ const handler = async (req: NextRequest) => {
           <h4>{description}</h4>
         </span>
       ),
-      textInput: "Monthly Value (Number)",
+      textInput: "Enter donation stream value",
       buttons: [
         <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
           UI

@@ -126,7 +126,7 @@ const handler = async (req: NextRequest) => {
           </p>
         </span>
       ),
-      textInput: "Monthly Value (Number)",
+      textInput: "Enter donation stream value",
       buttons: [
         <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
           UI
