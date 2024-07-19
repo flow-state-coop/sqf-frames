@@ -130,13 +130,13 @@ const handler = async (req: NextRequest) => {
           <h4>{title}</h4>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
           <p>
-            1 ${name} = {estimate} {tokenName} matching
+            1 ${name} = {estimate} {tokenName}
           </p>
           <p>
-            5 ${name} = {estimate5} {tokenName}/second
+            5 ${name} = {estimate5} {tokenName}
           </p>
           <p>
-            100 ${name} = {estimate100} {tokenName}/second
+            100 ${name} = {estimate100} {tokenName}
           </p>
         </span>
       ),
