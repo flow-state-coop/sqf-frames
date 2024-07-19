@@ -148,7 +148,7 @@ const handler = async (req: NextRequest) => {
           Multiplier
         </Button>,
         <Button action='link' target={donationUrl}>
-          Donation
+          Donate
         </Button>,
         // <Button
         //   action='tx'
