@@ -127,7 +127,9 @@ const handler = async (req: NextRequest) => {
           <div tw='flex relative -mt-20 left-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
-          <h4>{title}</h4>
+          <div tw='flex text-7xl font-bold'>
+            <h4 tw='mt-10 mb-0'>{title}</h4>
+          </div>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
           <p>
             1 ${name} = {estimate} {tokenName}

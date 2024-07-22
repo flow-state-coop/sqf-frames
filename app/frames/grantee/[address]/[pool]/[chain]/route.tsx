@@ -119,7 +119,7 @@ const handler = async (req: NextRequest) => {
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
           <div tw='flex text-7xl font-bold'>
-            <h4 tw='mt-0 mb-0'>{title}</h4>
+            <h4 tw='mt-10 mb-0'>{title}</h4>
           </div>
           <h4>{clampText(description, 180)}</h4>
         </span>
