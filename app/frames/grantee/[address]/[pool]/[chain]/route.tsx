@@ -119,9 +119,11 @@ const handler = async (req: NextRequest) => {
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
           <div tw='flex text-7xl font-bold'>
-            <h4 tw='mt-10 mb-0'>{title}</h4>
+            <h4 tw='mt-10'>{title}</h4>
           </div>
-          <h4>{clampText(description, 180)}</h4>
+          <div tw='flex justify-center items-center text-black border bg-green-600 rounded-3xl p-6'>
+            <h4>{clampText(description, 180)}</h4>
+          </div>
         </span>
       ),
       // textInput: "Monthly Value (Number)",

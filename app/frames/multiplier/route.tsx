@@ -131,15 +131,17 @@ const handler = async (req: NextRequest) => {
             <h4 tw='mt-10 mb-0'>{title}</h4>
           </div>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
-          <p>
-            1 ${name} = {estimate} {tokenName}
-          </p>
-          <p>
-            5 ${name} = {estimate5} {tokenName}
-          </p>
-          <p>
-            100 ${name} = {estimate100} {tokenName}
-          </p>
+          <div tw='flex flex-col justify-content items-center text-slate-500 border bg-green-600 rounded-3xl px-6 py-0'>
+            <h3 tw='text-black'>
+              1 ${name} = {estimate} {tokenName}
+            </h3>
+            <p>
+              5 ${name} = {estimate5} {tokenName}
+            </p>
+            <p>
+              100 ${name} = {estimate100} {tokenName}
+            </p>
+          </div>
         </span>
       ),
       // textInput: "Monthly Value (Number)",
