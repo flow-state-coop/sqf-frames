@@ -131,8 +131,8 @@ const handler = async (req: NextRequest) => {
             <h4 tw='mt-10 mb-0'>{title}</h4>
           </div>
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
-          <div tw='flex flex-col justify-content items-center text-slate-500 border bg-green-600 rounded-3xl px-6 py-0'>
-            <h3 tw='text-black'>
+          <div tw='flex flex-col justify-content items-center text-slate-500 border bg-black rounded-3xl px-6 py-0'>
+            <h3 tw='text-white'>
               1 ${name} = {estimate} {tokenName}
             </h3>
             <p>
