@@ -88,29 +88,46 @@ const handler = async (req: NextRequest) => {
       isPureSuperToken = true;
     }
 
+    const clampText = (str: string, newLength: number) => {
+      if (str.length <= newLength) {
+        return str;
+      }
+
+      return `${str.slice(0, newLength - 4)}...`;
+    };
+
+    const donationUrl =
+      "https://app.flowstate.network/?poolid=" +
+      pool +
+      "&chainid=" +
+      chainId +
+      "&recipientid=" +
+      address;
+
+    console.log("Donation URL ", donationUrl);
+
     return {
       image: (
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen'>
           <div tw='flex justify-center p-0 m-0'>
-            <h4>
-              ${name} {tokenName} by Flow State
-            </h4>
+            <h4>${name} on Flow State</h4>
           </div>
-          <div tw='flex justify-center -mt-5'>
+          {/* <div tw='flex justify-center -mt-5'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
-          </div>
+          </div> */}
           <div tw='flex relative -mt-20 left-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
-          <h4>{title}</h4>
-          <h4>{description}</h4>
+          <div tw='flex text-7xl font-bold'>
+            <h4 tw='mt-10'>{title}</h4>
+          </div>
+          <div tw='flex justify-center items-center text-white border bg-black rounded-3xl p-6'>
+            <h4>{clampText(description, 180)}</h4>
+          </div>
         </span>
       ),
-      textInput: "Monthly Value (Number)",
+      // textInput: "Monthly Value (Number)",
       buttons: [
-        <Button action='link' target={`https://sqf-degen-ui.vercel.app/`}>
-          UI
-        </Button>,
         <Button
           action='post'
           target={{
@@ -132,36 +149,39 @@ const handler = async (req: NextRequest) => {
         >
           Multiplier
         </Button>,
-        <Button
-          action='tx'
-          target={{
-            pathname: "/stream/wrapDegen",
-            query: {
-              chainId: chainId,
-              isWrapperSuperToken: isPureSuperToken,
-            },
-          }}
-          post_url={`/grantee/${address}/${pool}/${chainId}`}
-        >
-          1. Wrap
+        <Button action='link' target={donationUrl}>
+          Donate
         </Button>,
-        <Button
-          action='tx'
-          target={{
-            pathname: "/stream/donate",
-            query: {
-              address: queryRes.recipient.superappAddress,
-              pool: pool,
-              chainId: chainId,
-            },
-          }}
-          post_url={{
-            pathname: "/stream/success",
-            query: { address, pool, chainId, title },
-          }}
-        >
-          2. Stream
-        </Button>,
+        // <Button
+        //   action='tx'
+        //   target={{
+        //     pathname: "/stream/wrapDegen",
+        //     query: {
+        //       chainId: chainId,
+        //       isWrapperSuperToken: isPureSuperToken,
+        //     },
+        //   }}
+        //   post_url={`/grantee/${address}/${pool}/${chainId}`}
+        // >
+        //   1. Wrap
+        // </Button>,
+        // <Button
+        //   action='tx'
+        //   target={{
+        //     pathname: "/stream/donate",
+        //     query: {
+        //       address: queryRes.recipient.superappAddress,
+        //       pool: pool,
+        //       chainId: chainId,
+        //     },
+        //   }}
+        //   post_url={{
+        //     pathname: "/stream/success",
+        //     query: { address, pool, chainId, title },
+        //   }}
+        // >
+        //   2. Stream
+        // </Button>,
       ],
       state: {
         address: address || "",
