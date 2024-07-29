@@ -49,7 +49,7 @@ const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
     const title = queryRes.recipient.metadata.title ?? "";
     const allocationToken = queryRes.recipient.poolChain.allocationToken ?? "";
-    const tokenName = queryRes.recipient.poolChain.metadata.name ?? "";
+    const poolName = queryRes.recipient.poolChain.metadata.name ?? "";
     const amount = ctx.message?.inputText || "";
     const description = queryRes.recipient.metadata.description ?? "";
     const strategyAddress = queryRes.recipient.strategyAddress ?? "";
@@ -110,7 +110,7 @@ const handler = async (req: NextRequest) => {
       image: (
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen'>
           <div tw='flex justify-center p-0 m-0'>
-            <h4>${name} on Flow State</h4>
+            <h4>{poolName} on Flow State</h4>
           </div>
           {/* <div tw='flex justify-center -mt-5'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
@@ -122,7 +122,7 @@ const handler = async (req: NextRequest) => {
             <h4 tw='mt-10'>{title}</h4>
           </div>
           <div tw='flex justify-center items-center text-white border bg-black rounded-3xl p-6'>
-            <h4>{clampText(description, 180)}</h4>
+            <h4>{clampText(description, 174)}</h4>
           </div>
         </span>
       ),
@@ -143,8 +143,9 @@ const handler = async (req: NextRequest) => {
               strategyAddress: strategyAddress,
               chainName: chainName,
               name: name,
-              tokenName: tokenName,
-            },
+              poolName: poolName,
+              allocationTokenSymbol: allocationTokenSymbol,
+            } as unknown as Record<string, string>,
           }}
         >
           Multiplier
