@@ -20,7 +20,8 @@ const handler = async (req: NextRequest) => {
       strategyAddress = "",
       chainName,
       name,
-      tokenName,
+      poolName,
+      allocationTokenSymbol = "",
     } = ctx.searchParams;
 
     const apolloClient = new ApolloClient({
@@ -119,7 +120,7 @@ const handler = async (req: NextRequest) => {
       image: (
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen min-w-screen'>
           <div tw='flex justify-center p-0 m-0'>
-            <h4>${name} on Flow State</h4>
+            <h4>{poolName} on Flow State</h4>
           </div>
           {/* <div tw='flex justify-center -mt-5'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
@@ -133,13 +134,13 @@ const handler = async (req: NextRequest) => {
           <p>🌊💸 Real-Time QF Matching Multiplier</p>
           <div tw='flex flex-col justify-content items-center text-slate-500 border bg-black rounded-3xl px-6 py-0'>
             <h3 tw='text-white'>
-              1 ${name} = {estimate} {tokenName}
+              1 ${name} = {estimate} {allocationTokenSymbol}
             </h3>
             <p>
-              5 ${name} = {estimate5} {tokenName}
+              5 ${name} = {estimate5} {allocationTokenSymbol}
             </p>
             <p>
-              100 ${name} = {estimate100} {tokenName}
+              100 ${name} = {estimate100} {allocationTokenSymbol}
             </p>
           </div>
         </span>
