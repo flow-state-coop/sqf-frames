@@ -5,6 +5,7 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { strategyAbi } from "../../lib/abi/strategy";
 import { createPublicClient, formatEther, http, parseEther } from "viem";
 import { calcMatchingImpactEstimate } from "../../lib/matchingImpactEstimate";
+import { chainConfig } from "../constants";
 
 const SECONDS_IN_MONTH = 2628000;
 const handler = async (req: NextRequest) => {
@@ -33,8 +34,15 @@ const handler = async (req: NextRequest) => {
       ? strategyAddress
       : `0x${strategyAddress}`;
 
+    const chainConfigEntry = chainConfig[chainId];
+    if (!chainConfigEntry) {
+      throw new Error(`Unsupported chainId: ${chainId}`);
+    }
+
+    const { rpcUrl } = chainConfigEntry;
+
     const publicClient = createPublicClient({
-      transport: http("https://rpc.degen.tips"),
+      transport: http(rpcUrl),
       batch: {
         multicall: true,
       },
