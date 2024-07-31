@@ -130,19 +130,19 @@ const handler = async (req: NextRequest) => {
     return {
       image: (
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen min-w-screen'>
-          <div tw='flex justify-center p-0 m-0'>
+          <div tw='flex justify-center text-5xl p-0 -mt-10'>
             <h4>{poolName} on Flow State</h4>
           </div>
           {/* <div tw='flex justify-center -mt-5'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
           </div> */}
-          <div tw='flex relative -mt-20 left-5'>
+          <div tw='flex relative -mt-10 left-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
           <div tw='flex text-7xl font-bold'>
             <h4 tw='mt-10 mb-0'>{title}</h4>
           </div>
-          <p>🌊💸 Real-Time QF Matching Multiplier</p>
+          <p tw='mt-20'>🌊💸 Real-Time QF Matching Multiplier</p>
           <div tw='flex flex-col justify-content items-center text-slate-500 border bg-black rounded-3xl px-6 py-0'>
             <h3 tw='text-white'>
               1 ${name} = {estimate} {allocationTokenSymbol}
