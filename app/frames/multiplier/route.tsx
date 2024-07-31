@@ -12,6 +12,7 @@ const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
     const {
       address = "",
+      recipientAddress = "",
       pool = "",
       chainId = "666666666",
       title = "",
@@ -54,14 +55,16 @@ const handler = async (req: NextRequest) => {
       functionName: "gdaPool",
     });
 
+    console.log("gdaPool", gdaPool);
+
     const { data: queryRes } = await apolloClient.query({
       query: gql`
-        query MatchingPool($gdaPool: String!, $address: String!) {
+        query MatchingPool($gdaPool: String!, $recipientAddress: String!) {
           pool(id: $gdaPool) {
             flowRate
             adjustmentFlowRate
             totalUnits
-            poolMembers(where: { account: $address }) {
+            poolMembers(where: { account: $recipientAddress }) {
               units
             }
           }
@@ -69,7 +72,7 @@ const handler = async (req: NextRequest) => {
       `,
       variables: {
         gdaPool: gdaPool.toLowerCase(),
-        address,
+        recipientAddress,
       },
     });
 

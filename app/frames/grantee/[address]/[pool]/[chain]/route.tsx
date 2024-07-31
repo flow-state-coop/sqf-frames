@@ -35,6 +35,7 @@ const handler = async (req: NextRequest) => {
           metadata
           superappAddress
           strategyAddress
+          recipientAddress
           poolChain {
             allocationToken
             matchingToken
@@ -49,6 +50,7 @@ const handler = async (req: NextRequest) => {
   return await frames(async (ctx) => {
     const title = queryRes.recipient.metadata.title ?? "";
     const allocationToken = queryRes.recipient.poolChain.allocationToken ?? "";
+    const recipientAddress = queryRes.recipient.recipientAddress ?? "";
     const poolName = queryRes.recipient.poolChain.metadata.name ?? "";
     const amount = ctx.message?.inputText || "";
     const description = queryRes.recipient.metadata.description ?? "";
@@ -134,6 +136,7 @@ const handler = async (req: NextRequest) => {
             pathname: "/multiplier",
             query: {
               address: address,
+              recipientAddress: recipientAddress,
               pool: pool,
               chainId: chainId,
               title: title,
