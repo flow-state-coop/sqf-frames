@@ -111,20 +111,25 @@ const handler = async (req: NextRequest) => {
     return {
       image: (
         <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen'>
-          <div tw='flex justify-center p-0 m-0'>
+          <div tw='flex justify-center text-5xl p-0 m-0'>
             <h4>{poolName} on Flow State</h4>
           </div>
           {/* <div tw='flex justify-center -mt-5'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
           </div> */}
-          <div tw='flex relative -mt-20 left-5'>
+          <div tw='flex relative -mt-10 left-5'>
             <img src={logo} alt='Logo Image' width={200} height={200} />
           </div>
-          <div tw='flex text-7xl font-bold'>
-            <h4 tw='mt-10'>{title}</h4>
+          <div tw='flex text-7xl font-bold '>
+            <h4 tw='mt-20'>{title}</h4>
           </div>
           <div tw='flex justify-center items-center text-white border bg-black rounded-3xl p-6'>
             <h4>{clampText(description, 174)}</h4>
+          </div>
+          <div tw='flex justify-center items-center p-6'>
+            <p tw='text-center'>
+              Support {title} with real-time, quadratic matching below!
+            </p>
           </div>
         </span>
       ),
