@@ -71,6 +71,13 @@ const handler = async (req: NextRequest) => {
       abi: superTokenAbi,
       functionName: "symbol",
     });
+
+    const matchingTokenSymbol = await publicClient.readContract({
+      address: queryRes.recipient.poolChain.matchingToken,
+      abi: superTokenAbi,
+      functionName: "symbol",
+    });
+
     const underlyingToken = await publicClient.readContract({
       address: queryRes.recipient.poolChain.allocationToken,
       abi: superTokenAbi,
@@ -147,12 +154,11 @@ const handler = async (req: NextRequest) => {
               title: title,
               banner: banner,
               logo: logo,
-              isPureSuperToken: isPureSuperToken,
               strategyAddress: strategyAddress,
               chainName: chainName,
-              name: name,
-              poolName: poolName,
               allocationTokenSymbol: allocationTokenSymbol,
+              poolName: poolName,
+              matchingTokenSymbol: matchingTokenSymbol,
             } as unknown as Record<string, string>,
           }}
         >

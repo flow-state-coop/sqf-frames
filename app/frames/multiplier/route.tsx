@@ -18,12 +18,11 @@ const handler = async (req: NextRequest) => {
       title = "",
       banner = "",
       logo = "",
-      isPureSuperToken = false,
       strategyAddress = "",
       chainName,
-      name,
-      poolName,
       allocationTokenSymbol = "",
+      poolName,
+      matchingTokenSymbol = "",
     } = ctx.searchParams;
 
     const apolloClient = new ApolloClient({
@@ -145,13 +144,13 @@ const handler = async (req: NextRequest) => {
           <p tw='mt-20'>🌊💸 Real-Time QF Matching Multiplier</p>
           <div tw='flex flex-col justify-content items-center text-slate-500 border bg-black rounded-3xl px-6 py-0'>
             <h3 tw='text-white'>
-              1 ${allocationTokenSymbol} = {estimate} {name}
+              1 ${allocationTokenSymbol} = {estimate} {matchingTokenSymbol}
             </h3>
             <p>
-              5 ${allocationTokenSymbol} = {estimate5} {name}
+              5 ${allocationTokenSymbol} = {estimate5} {matchingTokenSymbol}
             </p>
             <p>
-              100 ${allocationTokenSymbol} = {estimate100} {name}
+              100 ${allocationTokenSymbol} = {estimate100} {matchingTokenSymbol}
             </p>
           </div>
         </span>
