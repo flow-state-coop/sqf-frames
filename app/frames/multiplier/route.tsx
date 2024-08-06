@@ -112,11 +112,15 @@ const handler = async (req: NextRequest) => {
       newFlowRate: parseEther("100") / BigInt(SECONDS_IN_MONTH),
     });
 
-    const estimate = formatEther(impactMatchingEstimate * BigInt(2628000));
-    const estimate5 = formatEther(impactMatchingEstimate5 * BigInt(2628000));
-    const estimate100 = formatEther(
-      impactMatchingEstimate100 * BigInt(2628000)
-    );
+    const estimate = Number(
+      formatEther(impactMatchingEstimate * BigInt(2628000))
+    ).toFixed(6);
+    const estimate5 = Number(
+      formatEther(impactMatchingEstimate5 * BigInt(2628000))
+    ).toFixed(6);
+    const estimate100 = Number(
+      formatEther(impactMatchingEstimate100 * BigInt(2628000))
+    ).toFixed(6);
 
     const donationUrl =
       "https://app.flowstate.network/?poolid=" +
