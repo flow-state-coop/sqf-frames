@@ -18,12 +18,11 @@ const handler = async (req: NextRequest) => {
       title = "",
       banner = "",
       logo = "",
-      isPureSuperToken = false,
       strategyAddress = "",
       chainName,
-      name,
-      poolName,
       allocationTokenSymbol = "",
+      poolName,
+      matchingTokenSymbol = "",
     } = ctx.searchParams;
 
     const apolloClient = new ApolloClient({
@@ -113,11 +112,15 @@ const handler = async (req: NextRequest) => {
       newFlowRate: parseEther("100") / BigInt(SECONDS_IN_MONTH),
     });
 
-    const estimate = formatEther(impactMatchingEstimate * BigInt(2628000));
-    const estimate5 = formatEther(impactMatchingEstimate5 * BigInt(2628000));
-    const estimate100 = formatEther(
-      impactMatchingEstimate100 * BigInt(2628000)
-    );
+    const estimate = Number(
+      formatEther(impactMatchingEstimate * BigInt(2628000))
+    ).toFixed(6);
+    const estimate5 = Number(
+      formatEther(impactMatchingEstimate5 * BigInt(2628000))
+    ).toFixed(6);
+    const estimate100 = Number(
+      formatEther(impactMatchingEstimate100 * BigInt(2628000))
+    ).toFixed(6);
 
     const donationUrl =
       "https://app.flowstate.network/?poolid=" +
@@ -145,13 +148,13 @@ const handler = async (req: NextRequest) => {
           <p tw='mt-20'>🌊💸 Real-Time QF Matching Multiplier</p>
           <div tw='flex flex-col justify-content items-center text-slate-500 border bg-black rounded-3xl px-6 py-0'>
             <h3 tw='text-white'>
-              1 ${allocationTokenSymbol} = {estimate} {name}
+              1 ${allocationTokenSymbol} = {estimate} {matchingTokenSymbol}
             </h3>
             <p>
-              5 ${allocationTokenSymbol} = {estimate5} {name}
+              5 ${allocationTokenSymbol} = {estimate5} {matchingTokenSymbol}
             </p>
             <p>
-              100 ${allocationTokenSymbol} = {estimate100} {name}
+              100 ${allocationTokenSymbol} = {estimate100} {matchingTokenSymbol}
             </p>
           </div>
         </span>
