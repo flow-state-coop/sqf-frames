@@ -19,23 +19,27 @@ export async function POST(
   const SECONDS_IN_MONTH = BigInt(2628000);
   const chainId = searchParams.get("chainId") ?? "666666666";
 
-  const chain = chainConfig[chainId];
-  if (!chain) {
-    throw new Error(`Unsupported chainId: ${chainId}`);
+  function getConfigAndAddressXByChainId(
+    chainId: string
+  ): [(typeof chainConfig)[keyof typeof chainConfig], `0x${string}`] {
+    const entry = Object.entries(chainConfig).find(
+      ([_, config]) => config.chainId === chainId
+    );
+    if (!entry) {
+      throw new Error(`Unsupported chainId: ${chainId}`);
+    }
+    return [entry[1], entry[0] as `0x${string}`];
   }
+
+  const [chainConfigEntry, addressX] = getConfigAndAddressXByChainId(chainId);
+
   const monthlyFlowRate = parseEther(amount);
   const flowRate = monthlyFlowRate / SECONDS_IN_MONTH;
 
   const createFlowCalldata = encodeFunctionData({
     abi: cfaForwarderAbi,
     functionName: "createFlow",
-    args: [
-      chain.addressX,
-      frameMessage.connectedAddress,
-      address,
-      flowRate,
-      "0x",
-    ],
+    args: [addressX, frameMessage.connectedAddress, address, flowRate, "0x"],
   });
 
   return NextResponse.json({
@@ -43,7 +47,7 @@ export async function POST(
     method: "eth_sendTransaction",
     params: {
       abi: cfaForwarderAbi as Abi,
-      to: chain.cfaForwarderAddress,
+      to: chainConfigEntry.cfaForwarderAddress,
       data: createFlowCalldata,
       value: "0",
     },

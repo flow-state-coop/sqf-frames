@@ -21,11 +21,17 @@ const handler = async (req: NextRequest) => {
   const chainId =
     pathSegments.length > 5 ? pathSegments[5] || "666666666" : "666666666";
 
-  const chainConfigEntry = chainConfig[chainId];
-  if (!chainConfigEntry) {
-    throw new Error(`Unsupported chainId: ${chainId}`);
+  function getConfigByChainId(chainId: string) {
+    const entry = Object.entries(chainConfig).find(
+      ([_, config]) => config.chainId === chainId
+    );
+    if (!entry) {
+      throw new Error(`Unsupported chainId: ${chainId}`);
+    }
+    return entry[1];
   }
 
+  const chainConfigEntry = getConfigByChainId(chainId);
   const { name, chainName, rpcUrl } = chainConfigEntry;
 
   const { data: queryRes } = await apolloClient.query({

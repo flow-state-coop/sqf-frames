@@ -34,11 +34,17 @@ const handler = async (req: NextRequest) => {
       ? strategyAddress
       : `0x${strategyAddress}`;
 
-    const chainConfigEntry = chainConfig[chainId];
-    if (!chainConfigEntry) {
-      throw new Error(`Unsupported chainId: ${chainId}`);
+    function getConfigByChainId(chainId: string) {
+      const entry = Object.entries(chainConfig).find(
+        ([_, config]) => config.chainId === chainId
+      );
+      if (!entry) {
+        throw new Error(`Unsupported chainId: ${chainId}`);
+      }
+      return entry[1];
     }
 
+    const chainConfigEntry = getConfigByChainId(chainId);
     const { rpcUrl } = chainConfigEntry;
 
     const publicClient = createPublicClient({
