@@ -19,7 +19,7 @@ export const chainConfig: Record<
     cfaForwarderAddress: "0xcfA132E353cB4E398080B9700609bb008eceB125",
     chainId: "42220",
     name: "CELO",
-    chainName: "Celo",
+    chainName: "celo-mainnet",
     rpcUrl: "https://forno.celo.org",
   },
   "0xFc55F2854e74b4f42D01a6d3DAAC4c52D9dfdcFf": {
