@@ -4,7 +4,7 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { NextRequest } from "next/server";
 
 const apolloClient = new ApolloClient({
-  uri: "https://api.streaming.fund/graphql",
+  uri: "https://api.flowstate.network/graphql",
   cache: new InMemoryCache(),
 });
 

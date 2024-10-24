@@ -14,27 +14,6 @@ export const unitOfTime = {
   [TimeInterval.YEAR]: "years",
 };
 
-export function weightedPick<T>(items: T[], weights: number[]): T | undefined {
-  if (items.length !== weights.length) {
-    throw new Error("Items and weights must be of the same length");
-  }
-
-  for (let i = 1; i < weights.length; i++) {
-    weights[i] += weights[i - 1] ?? 0; // Added nullish coalescing operator (?? 0)
-  }
-
-  const chance = Math.random() * (weights[weights.length - 1] ?? 0); // Added nullish coalescing operator (?? 0)
-
-  for (let i = 0; i < weights.length; i++) {
-    if ((weights[i] ?? 0) > chance) {
-      // Added nullish coalescing operator (?? 0)
-      return items[i];
-    }
-  }
-
-  return items[0]; // Default return if no item is found
-}
-
 export function getRandomNumberInRange(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }

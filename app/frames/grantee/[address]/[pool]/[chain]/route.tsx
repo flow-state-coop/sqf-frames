@@ -7,7 +7,7 @@ import { superTokenAbi } from "../../../../../lib/abi/superToken";
 import { createPublicClient, http } from "viem";
 
 const apolloClient = new ApolloClient({
-  uri: "https://api.streaming.fund/graphql",
+  uri: "https://api.flowstate.network/graphql",
   cache: new InMemoryCache(),
 });
 
@@ -112,11 +112,11 @@ const handler = async (req: NextRequest) => {
     };
 
     const donationUrl =
-      "https://app.flowstate.network/?poolid=" +
+      "https://flowstate.network/?poolId=" +
       pool +
-      "&chainid=" +
+      "&chainId=" +
       chainId +
-      "&recipientid=" +
+      "&recipientId=" +
       address;
 
     console.log("Donation URL ", donationUrl);

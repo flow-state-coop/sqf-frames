@@ -7,6 +7,7 @@ export function calcMatchingImpactEstimate({
   granteeFlowRate,
   previousFlowRate,
   newFlowRate,
+  flowRateScaling,
 }: {
   totalUnits: bigint;
   totalFlowRate: bigint;
@@ -14,18 +15,21 @@ export function calcMatchingImpactEstimate({
   granteeFlowRate: bigint;
   previousFlowRate: bigint;
   newFlowRate: bigint;
+  flowRateScaling: bigint;
 }) {
-  const scaledPreviousFlowRate = previousFlowRate / BigInt(1e6);
-  const scaledNewFlowRate = newFlowRate / BigInt(1e6);
+  const scaledPreviousFlowRate = previousFlowRate / flowRateScaling;
+  const scaledNewFlowRate = newFlowRate / flowRateScaling;
+  const newGranteeUnitsSquared =
+    sqrtBigInt(granteeUnits * BigInt(1e5)) -
+    sqrtBigInt(BigInt(scaledPreviousFlowRate)) +
+    sqrtBigInt(BigInt(scaledNewFlowRate));
   const newGranteeUnits =
-    (sqrtBigInt(granteeUnits * BigInt(1e5)) -
-      sqrtBigInt(BigInt(scaledPreviousFlowRate)) +
-      sqrtBigInt(BigInt(scaledNewFlowRate))) **
-      BigInt(2) /
-    BigInt(1e5);
+    (newGranteeUnitsSquared * newGranteeUnitsSquared) / BigInt(1e5);
   const unitsDelta = newGranteeUnits - granteeUnits;
   const newPoolUnits = unitsDelta + totalUnits;
-  const newGranteeFlowRate = (newGranteeUnits * totalFlowRate) / newPoolUnits;
+  const newGranteeFlowRate = newPoolUnits
+    ? (newGranteeUnits * totalFlowRate) / newPoolUnits
+    : BigInt(0);
 
   return newGranteeFlowRate - granteeFlowRate;
 }
