@@ -172,7 +172,7 @@ const handler = async (req: NextRequest) => {
     ];
 
     const donationUrl =
-      "https://flowstate.network/?poolId=" +
+      "https://flowstate.network/pool/?poolId=" +
       pool +
       "&chainId=" +
       chainId +
