@@ -62,8 +62,11 @@ const handler = async (req: NextRequest) => {
     const description = queryRes.recipient.metadata.description ?? "";
     const strategyAddress = queryRes.recipient.strategyAddress ?? "";
     const banner =
-      "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.bannerImg;
-    const logo = "https://ipfs.io/ipfs/" + queryRes.recipient.metadata.logoImg;
+      "https://gateway.pinata.cloud/ipfs/" +
+      queryRes.recipient.metadata.bannerImg;
+    const logo =
+      "https://gateway.pinata.cloud/ipfs/" +
+      queryRes.recipient.metadata.logoImg;
 
     const publicClient = createPublicClient({
       transport: http(rpcUrl),
@@ -123,24 +126,30 @@ const handler = async (req: NextRequest) => {
 
     return {
       image: (
-        <span tw='flex flex-col p-10 bg-slate-900 text-white min-h-screen'>
-          <div tw='flex justify-center text-5xl p-0 m-0'>
+        <span tw="flex flex-col p-10 bg-slate-900 text-white min-h-screen">
+          <div tw="flex justify-center text-5xl p-0 m-0">
             <h4>{poolName} on Flow State</h4>
           </div>
           {/* <div tw='flex justify-center -mt-5'>
             <img src={banner} alt='Banner Image' width={1000} height={200} />
           </div> */}
-          <div tw='flex relative -mt-10 left-5'>
-            <img src={logo} alt='Logo Image' width={200} height={200} />
+          <div tw="flex relative mt-10">
+            <img
+              src={logo}
+              alt="Logo Image"
+              width={200}
+              height={200}
+              tw="rounded-3xl"
+            />
           </div>
-          <div tw='flex text-7xl font-bold '>
-            <h4 tw='mt-20'>{title}</h4>
+          <div tw="flex text-7xl font-bold ">
+            <h4 tw="mt-10">{title}</h4>
           </div>
-          <div tw='flex justify-center items-center text-white border bg-black rounded-3xl p-6'>
+          <div tw="flex justify-center items-center text-white border bg-black rounded-3xl p-6">
             <h4>{clampText(description, 174)}</h4>
           </div>
-          <div tw='flex justify-center items-center p-6'>
-            <p tw='text-center'>
+          <div tw="flex justify-center items-center p-6">
+            <p tw="text-center">
               Support {title} with real-time, quadratic matching below!
             </p>
           </div>
@@ -149,7 +158,7 @@ const handler = async (req: NextRequest) => {
       // textInput: "Monthly Value (Number)",
       buttons: [
         <Button
-          action='post'
+          action="post"
           target={{
             pathname: "/multiplier",
             query: {
@@ -170,7 +179,7 @@ const handler = async (req: NextRequest) => {
         >
           Multiplier
         </Button>,
-        <Button action='link' target={donationUrl}>
+        <Button action="link" target={donationUrl}>
           Donate
         </Button>,
         // <Button
